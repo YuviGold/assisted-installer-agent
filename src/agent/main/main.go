@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/openshift/assisted-installer-agent/src/commands"
 	"github.com/openshift/assisted-installer-agent/src/config"
@@ -22,6 +23,14 @@ func main() {
 			fmt.Println(output)
 		}
 	} else {
+		output, errStr, exitCode := commands.StartNTPDaemon()
+		if exitCode != 0 {
+			fmt.Println(errStr)
+			os.Exit(exitCode)
+		} else {
+			fmt.Println(output)
+		}
+
 		commands.RegisterHostWithRetry()
 		commands.ProcessSteps()
 	}
